@@ -13,7 +13,7 @@ export default function RegisFormPage() {
   const [buyBottle, setBuyBottle] = useState(false);
   const [buyShoes, setBuyShoes] = useState(false);
   const [buyCap, setBuyCap] = useState(false);
-  const [fuck, KK] = useState(false);
+  const [isUserAgreed, setUser] = useState(false);
 
   const inputFnameOnChange = (event) => {
     setFnameError(false);
@@ -53,7 +53,7 @@ export default function RegisFormPage() {
   };
 
   const termOnChange = (event) => {
-    KK(event.target.checked);
+    setUser(event.target.checked);
   };
 
   function computeTotalPayment() {
@@ -160,11 +160,15 @@ export default function RegisFormPage() {
             checked={gender === "female"}
           />
           Female 👩
-          {genderError ? (
-            <div className="text-danger">Please select gender</div>
-          ) : (
-            ""
-          )}
+          {/* To show error when user did not select gender, */}
+          {/* We just have to render the div below (Not using is-invalid bootstrap class) */}
+          <div className="text-primary">
+            {genderError ? (
+              <div className="text-danger">Please select gender</div>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
       </div>
 
@@ -207,11 +211,13 @@ export default function RegisFormPage() {
       {/* Total Payment */}
       <div>
         Total Payment : {computeTotalPayment().toLocaleString()} THB
+        {/* Render below element conditionally when user get 20% discount */}
         {buyBottle && buyCap && buyCap ? (
           <span className="text-success d-block">(20% Discounted)</span>
         ) : (
           ""
         )}
+        {/* <span className="text-success d-block">(20% Discounted)</span> */}
       </div>
 
       {/* Terms and conditions */}
@@ -220,7 +226,7 @@ export default function RegisFormPage() {
           className="me-2"
           type="checkbox"
           onChange={termOnChange}
-          checked={fuck}
+          checked={isUserAgreed}
         />
         I agree to the terms and conditions
       </div>
@@ -229,7 +235,8 @@ export default function RegisFormPage() {
       <button
         className="btn btn-success my-2"
         onClick={registerBtnOnClick}
-        disabled={!fuck}
+        //You can embbed a state like below to disabled the button
+        disabled={isUserAgreed}
       >
         Register
       </button>
